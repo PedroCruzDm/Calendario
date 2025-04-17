@@ -3,9 +3,10 @@ import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'; 
 import 'moment/locale/pt-br';
-import  EventModal  from './EventModal.jsx';
+import  EventModal  from './EventModal/EventModal.jsx';
+import EventModalAdd from './EventModal/EventModalAdd.jsx';
 
 const DragAndDrop = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
@@ -17,8 +18,16 @@ function Calendario(){
       title: 'Primeiro evento',
       start: new Date(2025, 3, 1, 10, 0),
       end: new Date(2025, 3, 1, 24, 0),
-      /*Color: '#ae00ff',*/
+      color: '#ae00ff',
+      type: 'evento teste',
+      important: "teste",
       desc: 'Primeiro calendário teste',
+    },
+    {
+      id: 2,
+      title: 'Feira do Empreendedor',
+      start: new Date(2025, 3, 2, 10, 0),
+      end: new Date(2025, 3, 2, 24, 0),
     },
   ]);
 
@@ -54,6 +63,23 @@ function Calendario(){
     setEventsSelected(null);
   }
 
+  const AdicionarEvent = (slotInfo) => {
+  
+    const newEvent = {
+      id: events.length + 1,
+      title: 'Novo evento',
+      start: slotInfo.start,
+      end: slotInfo.end,
+      color: '#00aaff',
+      type: 'novo evento',
+      important: "n/a",
+      desc: 'Evento criado ao selecionar um intervalo',
+    };
+
+
+    setEvents([...events, newEvent]);
+  }
+
   return (
     <div>
       <DragAndDrop
@@ -65,19 +91,34 @@ function Calendario(){
         resizable
         onEventDrop={onEventDrop}
         onEventResize={onEventResize}
-        onSelectEvent={handleEventSelect}
+        eventPropGetter={EventStyle}
+        onDoubleClickEvent={handleEventSelect}
+        selectable
+        onSelectSlot={AdicionarEvent}
         className="calendario"
       />
+
       
       {eventsSelected && (
-        <EventModal 
-          event={eventsSelected}
-          onClose={handleEventClose}
-          className="modal_event"
-        />
+        <EventModal event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
       )}
+
+      {eventsSelected && (eventsSelected.title === 'Novo evento') && (
+        <EventModalAdd event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
+      )}
+
+      
     </div>
   );
 }
 
+const EventStyle = (event) => {
+  return {
+    style: {
+      backgroundColor: event.color,
+      fontWeight: 'bold',
+      fontSize: 20,
+    },
+  };
+}
 export default Calendario;

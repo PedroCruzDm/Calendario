@@ -1,7 +1,7 @@
 import React from "react";
-import style from "./style.css";
+import style from "./../Styles/style.css";
 
-const EventModal = ({ event, onClose }) => {
+const EventModal = ({ event, onClose}) => {
     return(
         <div className="modal_event">
             <div className="modal_event_container">
@@ -12,9 +12,16 @@ const EventModal = ({ event, onClose }) => {
 
                 <div className="modal_event_body">
                     <h2>{event.title}</h2>
-                    <p>{event.desc}</p>
+                    <p>Tipo: {event.type}</p>
+                    <p>Descrição: {event.desc}</p>
                     <p>Início: {event.start.toString()}</p>
                     <p>Fim: {event.end.toString()}</p>
+                    <p>Nível de importancia: {event.important}</p>
+                </div>
+
+                <div className="modal_event_buttons">
+                    <button className="modal_event_edit">Editar</button>
+                    <button className="modal_event_delete">Excluir</button>
                 </div>
         
             </div>
