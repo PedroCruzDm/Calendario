@@ -26,8 +26,12 @@ function Calendario(){
     {
       id: 2,
       title: 'Feira do Empreendedor',
-      start: new Date(2025, 3, 2, 10, 0),
-      end: new Date(2025, 3, 2, 24, 0),
+      start: new Date(2025, 4, 10, 10, 0),
+      end: new Date(2025, 4, 10, 24, 0),
+      color: 'orange',
+      type: 'Entrega do Projeto',
+      important: "urgente",
+      desc: 'Feira do Empreendedor, apresentação do Calendário',
     },
   ]);
 
