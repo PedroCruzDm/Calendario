@@ -1,42 +1,39 @@
-import React, { createElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'; 
 import 'moment/locale/pt-br';
-import  EventModal  from './EventModal/EventModal.jsx';
+import EventModal from './EventModal/EventModal.jsx';
 import EventModalAdd from './EventModal/EventModalAdd.jsx';
+import { eventos, fetchEventos } from './Events/Events.jsx';
 
 const DragAndDrop = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
-function Calendario(){
-  const [events, setEvents] = React.useState([
-    {
-      id: 1,
-      title: 'Primeiro evento',
-      start: new Date(2025, 3, 1, 10, 0),
-      end: new Date(2025, 3, 1, 24, 0),
-      color: '#ae00ff',
-      type: 'evento teste',
-      important: "teste",
-      desc: 'Primeiro calendário teste',
-    },
-    {
-      id: 2,
-      title: 'Feira do Empreendedor',
-      start: new Date(2025, 4, 10, 10, 0),
-      end: new Date(2025, 4, 10, 24, 0),
-      color: 'orange',
-      type: 'Entrega do Projeto',
-      important: "urgente",
-      desc: 'Feira do Empreendedor, apresentação do Calendário',
-    },
-  ]);
+function Calendario() {
+  const [events, setEvents] = useState(eventos); //Iniciando com os eventos
+  const [eventsSelected, setEventsSelected] = useState(null);
 
-  const [eventsSelected, setEventsSelected] = React.useState(null);
-
+  useEffect(() => {
+    const loadEvents = async () => {
+      const eventosFromDb = await fetchEventos();
+  
+      setEvents((prevEvents) => {
+        const eventosUnicos = [
+          ...prevEvents,
+          ...eventosFromDb.filter((eventoFromDb) => 
+            !prevEvents.some((evento) => evento.id === eventoFromDb.id)
+          )
+        ];
+        return eventosUnicos;
+      });
+    };
+  
+    loadEvents();
+  }, []);
+  
 
   const onEventDrop = (data) => {
     const { start, end } = data;
@@ -47,7 +44,8 @@ function Calendario(){
       return event;
     });
     setEvents(updatedEvents);
-  }
+  };
+
   const onEventResize = (data) => {
     const { start, end } = data;
     const updatedEvents = events.map((event) => {
@@ -57,18 +55,17 @@ function Calendario(){
       return event;
     });
     setEvents(updatedEvents);
-  }
+  };
 
   const handleEventSelect = (event) => {
     setEventsSelected(event);
-  }
+  };
 
   const handleEventClose = () => {
     setEventsSelected(null);
-  }
+  };
 
   const AdicionarEvent = (slotInfo) => {
-  
     const newEvent = {
       id: events.length + 1,
       title: 'Novo evento',
@@ -79,10 +76,8 @@ function Calendario(){
       important: "n/a",
       desc: 'Evento criado ao selecionar um intervalo',
     };
-
-
     setEvents([...events, newEvent]);
-  }
+  };
 
   return (
     <div>
@@ -102,7 +97,6 @@ function Calendario(){
         className="calendario"
       />
 
-      
       {eventsSelected && (
         <EventModal event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
       )}
@@ -110,8 +104,6 @@ function Calendario(){
       {eventsSelected && (eventsSelected.title === 'Novo evento') && (
         <EventModalAdd event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
       )}
-
-      
     </div>
   );
 }
@@ -124,5 +116,6 @@ const EventStyle = (event) => {
       fontSize: 20,
     },
   };
-}
+};
+
 export default Calendario;
