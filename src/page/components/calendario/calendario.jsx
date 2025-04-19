@@ -16,23 +16,15 @@ function Calendario() {
   const [events, setEvents] = useState(eventos); //Iniciando com os eventos
   const [eventsSelected, setEventsSelected] = useState(null);
 
-  useEffect(() => {
-    const loadEvents = async () => {
-      const eventosFromDb = await fetchEventos();
-  
-      setEvents((prevEvents) => {
-        const eventosUnicos = [
-          ...prevEvents,
-          ...eventosFromDb.filter((eventoFromDb) => 
-            !prevEvents.some((evento) => evento.id === eventoFromDb.id)
-          )
-        ];
-        return eventosUnicos;
-      });
+  React.useEffect(() => {
+    const carregarEventos = async () => {
+      const dados = await fetchEventos();
+      setEvents(dados);
     };
-  
-    loadEvents();
+    carregarEventos();
   }, []);
+  
+  
   
 
   const onEventDrop = (data) => {

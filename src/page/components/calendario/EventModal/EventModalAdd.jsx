@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./../Styles/style.css";
-import Calendario from "./../calendario.jsx";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { db } from './../../../../firebaseconfig.js';
 
-const EventModalAdd = ({ event, onClose}) => {
-    return(
+const EventModalAdd = ({ event, onClose }) => {
+    const [title, setTitle] = useState(event.title);
+    const [type, setType] = useState(event.type);
+    const [desc, setDesc] = useState(event.desc);
+    const [start, setStart] = useState(event.start.toISOString().slice(0,16));
+    const [end, setEnd] = useState(event.end.toISOString().slice(0,16));
+    const [important, setImportant] = useState(event.important);
+    const [color, setColor] = useState('#00aaff'); // Cor padrão inicial
+
+    // Função para salvar o evento
+    const handleSave = async () => {
+        const newEvent = {
+            title,
+            type,
+            desc,
+            start,
+            end,
+            important,
+            color, // A cor agora será enviada ao Firestore
+            id: Date.now()
+        };
+
+        try {
+            // Inserindo o novo evento no Firestore
+            await addDoc(collection(db, "eventos"), newEvent);
+            
+            // Fechar o modal após salvar
+            onClose();
+            // Aqui você pode chamar a função fetchEventos para atualizar o calendário
+        } catch (error) {
+            console.error("Erro ao adicionar evento:", error);
+        }
+    };
+
+    return (
         <div className="modal_event">
             <div className="modal_event_container">
                 <div className="modal_event_header">
@@ -12,30 +46,49 @@ const EventModalAdd = ({ event, onClose}) => {
                 </div>
 
                 <div className="modal_event_body">
-                    
-                    <h2>{event.title}</h2>
-                    <input type="text" placeholder={event.title} required/>
+                    <input 
+                        type="text" 
+                        value={title} 
+                        onChange={e => setTitle(e.target.value)} 
+                        required 
+                    />
 
-                    <p>Tipo: {event.type}</p>
-                    <select required>
+                    <select 
+                        value={type} 
+                        onChange={e => setType(e.target.value)} 
+                        required
+                    >
                         <option value="Reunião">Reunião</option>
                         <option value="Tarefa">Tarefa</option>
                         <option value="Evento">Evento</option>
-                        <option value="Sabado Letivo">Sabado Letivo</option>
+                        <option value="Sabado Letivo">Sábado Letivo</option>
                         <option value="Outro">Outro</option>
                     </select>
 
-                    <p>Descrição: {event.desc}</p>
-                    <textarea placeholder={event.desc} required></textarea>
+                    <textarea 
+                        value={desc} 
+                        onChange={e => setDesc(e.target.value)} 
+                        required
+                    ></textarea>
 
-                    <p>Início: {event.start.toString()}</p>
-                    <input type="datetime-local" value={event.start.toString()} required/>
+                    <input 
+                        type="datetime-local" 
+                        value={start} 
+                        onChange={e => setStart(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="datetime-local" 
+                        value={end} 
+                        onChange={e => setEnd(e.target.value)} 
+                        required 
+                    />
 
-                    <p>Fim: {event.end.toString()}</p>
-                    <input type="datetime-local" value={event.end.toString()} required/>
-
-                    <p id="importante">Nível de importancia: {event.important}</p>
-                    <select required>
+                    <select 
+                        value={important} 
+                        onChange={e => setImportant(e.target.value)} 
+                        required
+                    >
                         <option value="n/a">N/A</option>
                         <option value="Leve">Leve</option>
                         <option value="Moderado">Moderado</option>
@@ -43,15 +96,23 @@ const EventModalAdd = ({ event, onClose}) => {
                         <option value="Urgente">Urgente</option>
                     </select>
 
+                    {/* Input de cor */}
+                    <p>Escolha a cor do evento:</p>
+                    <input 
+                        type="color" 
+                        value={color} 
+                        onChange={e => setColor(e.target.value)} 
+                        required 
+                    />
+
                     <div className="modal_event_buttons">
-                        <button className="modal_event_save">Salvar</button>
+                        <button className="modal_event_save" onClick={handleSave}>Salvar</button>
                         <button className="modal_event_cancel" onClick={onClose}>Cancelar</button>
                     </div>
                 </div>
-        
             </div>
         </div>
     );
-}
+};
 
 export default EventModalAdd;

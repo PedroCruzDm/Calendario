@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { db } from './../../../../firebaseconfig.js';
 
 export const eventos = [
@@ -22,36 +22,44 @@ export const eventos = [
     important: "urgente",
     desc: 'Feira do Empreendedor, apresentação do Calendário',
   },
-];  //console.log("Eventos do Firestore:", eventos); //log verificar os eventos
+  {
+    id: 4,
+    title: 'Hoje',
+    start: new Date(),
+    end: new Date(),
+    color: '#00aaff',
+    type: 'Hoje',
+    important: "n/a",
+    desc: 'Hoje',
+  },
+];
 
-export const fetchEventos = async () => { // Função para buscar eventos do Firestore
-    const eventoDocRef = doc(db, "eventos", "oPGh2eSrnLpsX7G1ed7H");//documento específico
-    const eventoDocSnap = await getDoc(eventoDocRef);
-    
-    if (eventoDocSnap.exists()) {
-      const eventoData = eventoDocSnap.data(); // Obter dados do doc
-  
-      //converter a string de data para Date
-      const convertToDate = (dateString) => {
-        const [year, month, day, hours, minutes] = dateString.split(', ').map(Number);
-        return new Date(year, month - 1, day, hours, minutes);
-      };
-  
-      // Add dados do Firestore no eventos
-      const eventosFirestore = {
-        id: eventoDocSnap.id,
-        title: eventoData.title,
-        start: convertToDate(eventoData.start),
-        end: convertToDate(eventoData.end),
-        color: eventoData.color,
-        type: eventoData.type,
-        important: eventoData.important,
-        desc: eventoData.desc,
-      };
-  
-      return [...eventos, eventosFirestore];
-    } else {
-      console.log("Nenhum evento encontrado no Firestore!");
-      return eventos;
-    }
-  };
+export const fetchEventos = async () => {
+  try {
+    const eventosRef = collection(db, "eventos");
+    const snapshot = await getDocs(eventosRef);
+
+    // Exemplo para iterar sobre todos os docs da collection
+    const eventosFirestore = [];
+    snapshot.docs.forEach((docSnap) => {
+      const data = docSnap.data();
+
+      eventosFirestore.push({
+        id: docSnap.id, // Id do documento
+        title: data.title,
+        start: new Date(data.start), // Convertendo a data para um objeto Date
+        end: new Date(data.end), // Convertendo a data para um objeto Date
+        color: data.color,
+        type: data.type,
+        important: data.important,
+        desc: data.desc,
+      });
+    });
+
+    // Retorna todos os eventos do Firestore mais os eventos locais (se existirem)
+    return [...eventos, ...eventosFirestore];
+  } catch (error) {
+    console.error("Erro ao buscar eventos do Firestore:", error);
+    return eventos;
+  }
+};
