@@ -17,6 +17,8 @@
     border-radius: 14px;
     width: 80%;
     max-width: 600px;
+    height: 400px;
+    max-height: 800px;
 }
 
 .modal_event_container h2{

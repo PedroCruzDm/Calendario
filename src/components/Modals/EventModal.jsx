@@ -1,7 +1,9 @@
 import React from "react";
-import style from "./../Styles/style.css";
+import {db} from './../../hooks/FireBase/firebaseconfig.js';
+import { doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import './Styles/style.css';
 
-const EventModal = ({ event, onClose}) => {
+const EventModal = ({ event, onClose, onDeleteEvento }) => {
     return(
         <div className="modal_event">
             <div className="modal_event_container">
@@ -21,12 +23,28 @@ const EventModal = ({ event, onClose}) => {
 
                 <div className="modal_event_buttons">
                     <button className="modal_event_edit">Editar</button>
-                    <button className="modal_event_delete">Excluir</button>
+                    <button className="modal_event_delete" onClick={() => handleDelete(event, onDeleteEvento, onClose)}>Excluir</button>
                 </div>
         
             </div>
         </div>
     );
 }
+
+const handleDelete = async (event, onDeleteEvento, onClose) => {
+    try {
+        // Referência do documento que será excluído
+        const docRef = doc(db, "eventos", event.id);
+        await deleteDoc(docRef); // Deleta o evento do Firestore
+
+        if (onDeleteEvento) {
+            onDeleteEvento(event.id); // Atualiza o estado local
+        }
+
+        onClose(); // Fecha o modal
+    } catch (error) {
+        console.error("Erro ao excluir evento:", error);
+    }
+};
 
 export default EventModal;

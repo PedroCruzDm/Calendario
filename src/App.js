@@ -1,7 +1,6 @@
 import './App.css';
 import React from 'react';
-import Calendario from './page/components/calendario/calendario.jsx';
-import { db, eventosRef} from './firebaseconfig.js';  // Importando o Firebase
+import Calendario from './components/Calendario/calendario.jsx';
 
 function App() {
   return (
@@ -9,23 +8,11 @@ function App() {
       <div className='divisoria'>
         <Calendario />
 
-        <div className='ferramentas'>
+        <div className='ferramentas'></div>
         
-        </div>
       </div>
     </div>
   );
 }
-
-const style = {
-  App_Calendario: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
-    height: '100vh',
-  },
-};
 
 export default App;

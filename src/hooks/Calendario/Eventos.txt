@@ -1,16 +1,16 @@
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { db } from './../../../../firebaseconfig.js';
+import { db } from '../FireBase/firebaseconfig.js';
 
 export const eventos = [
   {
     id: 1,
-    title: 'Primeiro evento',
+    title: 'Primeiro evento fisico',
     start: new Date(2025, 3, 1, 10, 0),
     end: new Date(2025, 3, 1, 24, 0),
     color: '#ae00ff',
     type: 'evento teste',
     important: "teste",
-    desc: 'Primeiro calendário teste',
+    desc: 'Primeiro calendário teste no (código react)',
   },
   {
     id: 2,
@@ -21,16 +21,6 @@ export const eventos = [
     type: 'Entrega do Projeto',
     important: "urgente",
     desc: 'Feira do Empreendedor, apresentação do Calendário',
-  },
-  {
-    id: 4,
-    title: 'Hoje',
-    start: new Date(),
-    end: new Date(),
-    color: '#00aaff',
-    type: 'Hoje',
-    important: "n/a",
-    desc: 'Hoje',
   },
 ];
 
