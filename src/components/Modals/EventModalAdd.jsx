@@ -29,10 +29,10 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
             newEvent.id = docRef.id; // substitui o id local pelo id do Firestore
 
             if (onAddEvento) {
-                onAddEvento(newEvent); // adiciona ao estado local
+                onAddEvento(newEvent);
             }
 
-            onClose(); // fecha o modal
+            onClose();
         } catch (error) {
             console.error("Erro ao adicionar evento:", error);
         }

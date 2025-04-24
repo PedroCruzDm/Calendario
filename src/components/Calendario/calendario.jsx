@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer,} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'; 
 import 'moment/locale/pt-br';
 import EventModal from '../Modals/EventModal.jsx';
 import EventModalAdd from '../Modals/EventModalAdd.jsx';
-import EventModalTools from '../Modals/EventModalTools.jsx';
 import { eventos, fetchEventos } from './../../hooks/Calendario/Eventos.js';
 import './Style/calendario.css';
 
@@ -21,6 +20,7 @@ function Calendario() {
   React.useEffect(() => {
     const carregarEventos = async () => {
       const dados = await fetchEventos();
+      console.log(dados);
       setEvents(dados);
     };
     carregarEventos();
@@ -75,7 +75,7 @@ function Calendario() {
       <DragAndDrop
         localizer={localizer}
         defaultDate={moment().toDate()}
-        defaultView='month'
+        defaultView="month"
         views={['month', 'week', 'day', 'agenda']}
         style={{ height: 900, fontWeight: 'bold', fontSize: 20 }}
         events={events}
@@ -84,9 +84,11 @@ function Calendario() {
         onEventResize={onEventResize}
         eventPropGetter={EventStyle}
         onDoubleClickEvent={handleEventSelect}
+        onUpdateEvent={handleEventSelect}
         selectable
         onSelectSlot={AdicionarEvent}
         className="calendario"
+        popup={true}
       />
 
       {eventsSelected && (
