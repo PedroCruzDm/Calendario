@@ -59,15 +59,16 @@ function Calendario() {
   const AdicionarEvent = (slotInfo) => {
     const newEvent = {
       id: events.length + 1,
-      title: 'Novo evento',
+      title: '',
       start: slotInfo.start,
       end: slotInfo.end,
-      color: '#00aaff',
+      color: '',
       type: 'novo evento',
       important: "n/a",
       desc: 'Evento criado ao selecionar um intervalo',
     };
     setEvents([...events, newEvent]);
+    setEventsSelected(newEvent);
   };
 
   return (
@@ -76,8 +77,8 @@ function Calendario() {
         localizer={localizer}
         defaultDate={moment().toDate()}
         defaultView="month"
-        views={['month', 'week', 'day', 'agenda']}
-        style={{ height: 900, fontWeight: 'bold', fontSize: 20 }}
+        views={['month', 'week', 'day',]}
+        
         events={events}
         resizable
         onEventDrop={onEventDrop}
@@ -94,8 +95,8 @@ function Calendario() {
       {eventsSelected && (
         <EventModal event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
       )}
-
-      {eventsSelected && eventsSelected.title === 'Novo evento' && (
+      
+      {eventsSelected && eventsSelected.title === '' && (
         <EventModalAdd event={eventsSelected} onClose={handleEventClose} className="modal_event"/>
       )}
 
