@@ -12,7 +12,6 @@ export const fetchEventos = async () => {
 
     const eventosFormatados = snapshot.docs.map((docSnap) => {
       const data = docSnap.data();
-
       const formatDate = (d) => {
         if (!d) return "";
 

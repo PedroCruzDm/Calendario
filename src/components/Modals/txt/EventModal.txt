@@ -1,52 +1,47 @@
-import React from "react";
-import {db} from './../../hooks/FireBase/firebaseconfig.js';
-import { doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import './Styles/style.css';
+The MIT License (MIT)
 
-const EventModal = ({ event, onClose, onDeleteEvento }) => {
-    return(
-        <div className="modal_event">
-            <div className="modal_event_container">
-                <div className="modal_event_header">
-                    <h2>{event.title}</h2>
-                    <button onClick={onClose} className="modal_event_close">X</button>
-                </div>
+Copyright (c) 2015-present Jason Quense
 
-                <div className="modal_event_body">
-                    <h2>{event.title}</h2>
-                    <p>Tipo: {event.type}</p>
-                    <p>Descrição: {event.desc}</p>
-                    <p>Início: {event.start.toString()}</p>
-                    <p>Fim: {event.end.toString()}</p>
-                    <p>Nível de importancia: {event.important}</p>
-                </div>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-                <div className="modal_event_buttons">
-                    <button className="modal_event_edit" onClick={() => setModalEditVisible(true)}>Editar</button>
-                    <button className="modal_event_delete" onClick={() => handleDelete(event, onDeleteEvento, onClose)}>Excluir</button>
-                </div>
-        
-            </div>
-        </div>
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-        
-    );
-}
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-const handleDelete = async (event, onDeleteEvento, onClose) => {
-    try {
-        // Referência do documento que será excluído
-        const docRef = doc(db, "eventos", event.id);
-        await deleteDoc(docRef); // Deleta o evento do Firestore
 
-        if (onDeleteEvento) {
-            onDeleteEvento(event.id); // Atualiza o estado local
-        }
 
-        onClose(); // Fecha o modal
-    } catch (error) {
-        console.error("Erro ao excluir evento:", error);
-    }
-};
 
-export default EventModal;
+              <p>
+                Início:{" "}
+                {new Date(event.start).toLocaleString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: "America/Sao_Paulo",
+                })}
+              </p>
+              <p>
+                Fim:{" "}
+                {new Date(event.end).toLocaleString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: "America/Sao_Paulo",
+                })}
+              </p>

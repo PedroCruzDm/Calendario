@@ -5,12 +5,7 @@ import Calendario from './components/Calendario/calendario.jsx';
 function App() {
   return (
     <div className='App Calendario'>
-      <div className='divisoria'>
-        <Calendario />
-
-        <div className='ferramentas'></div>
-        
-      </div>
+      <Calendario />
     </div>
   );
 }

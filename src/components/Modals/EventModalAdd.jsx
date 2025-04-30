@@ -22,11 +22,9 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
             return;
         }
         
-        
         else{
-
             const newEvent = {
-                title,
+            title,
             type,
             desc,
             start,
@@ -61,7 +59,7 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
 
                 <div className="modal_event_body">
                     <p>Nome do Evento:</p>
-                    <input type="text" value={title} onChange={e => setTitle(e.target.value)}required/>
+                    <input type="text" value={title} onChange={e => setTitle(e.target.value)} required/>
 
                     <p>Tipo de Evento:</p>
                     <select value={type} onChange={e => setType(e.target.value)} required>
@@ -73,8 +71,7 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Descrição do Evento:</p>
-                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px',}} required>    
-                    </textarea>
+                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px',}} required></textarea>
 
                     <p>Data de Inícial do evento:</p>
                     <input type="datetime-local" value={start} onChange={e => setStart(e.target.value)} required/>
@@ -92,7 +89,11 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Escolha a cor do evento:</p>
-                    <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
+                    <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                        <div className="div_grupo_cor">
+                            <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
+                        </div>
+                    </div>
 
                     <div className="modal_event_buttons">
                         <button className="modal_event_save" onClick={handleSave}>Salvar</button>

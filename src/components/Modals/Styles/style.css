@@ -19,19 +19,21 @@
     }
 }
 
+/*Create*/
 .modal_event_container{
-    background-color: white;
-    padding: 20px;
-    border-radius: 14px;
+    border-radius: 50px;
+    background: #f7f6f6;
+    padding: 10px;
+    border-radius: 24px;
     width: 80%;
     max-width: 600px;
     height: auto;
     overflow-y: auto;
-    max-height: 800px;
+    max-height: 850px;
 }
 
 .modal_event_container h2{
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
 }
 
 .modal_event_header{
@@ -60,4 +62,113 @@
 .modal_event_body p{
     margin-bottom: 5px;
     font-weight: bold;
+}
+
+.modal_event_body input{
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.modal_event_body textarea{
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.modal_event_body select{
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.modal_event_body select option{
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.modal_event_body button{
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    margin-right: 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal_event_body .modal_event_save, .modal_event_save{
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.modal_event_body .modal_event_save:hover, .modal_event_save:hover{
+    background-color: #0056b3;
+}
+
+.modal_event_body .modal_event_cancel, .modal_event_cancel{
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 0 0 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.modal_event_body .modal_event_cancel:hover, .modal_event_cancel:hover{
+    background-color: #c40202;
+}
+
+/*View*/
+.info_type_event{
+    background-color: #e4e4e4;
+    opacity: 0.4;
+    border-radius: 24px;
+    width: 12%;
+    padding: 4px;
+}
+
+.modal_event_edit{
+    background-color: #007bff;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.modal_event_edit:hover{
+    background-color: #0056b3;
+}
+
+.modal_event_delete{
+    background-color: #f10c23;
+    margin: 0 0 0 20px;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.modal_event_delete:hover{
+    background-color: #c82333;
 }
