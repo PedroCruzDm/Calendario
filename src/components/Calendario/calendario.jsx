@@ -18,6 +18,8 @@ const localizer = momentLocalizer(moment);
 function Calendario() {
   const [events, setEvents] = useState(eventos); //Iniciando com os eventos
   const [eventsSelected, setEventsSelected] = useState(null);
+  const [view, setView] = useState('week');
+  const [date, setDate] = useState(moment().toDate());
 
   React.useEffect(() => {
     const carregarEventos = async () => {
@@ -131,7 +133,7 @@ function Calendario() {
   const finaisSemana = useCallback((date) => {
     const cor_fim_de_semana = 'rgba(236, 17, 17, 0.09)';
     if (moment(date).day() === 0) {
-      return { className: 'sunday', style: { backgroundColor: cor_fim_de_semana, color: 'black' } };
+      return { className: 'sunday', style: { backgroundColor: cor_fim_de_semana, color: 'red' } };
     }
     if (moment(date).day() === 6) {
       return { className: 'saturday', style: { backgroundColor: cor_fim_de_semana, color: 'black' } };
@@ -143,8 +145,12 @@ function Calendario() {
     <div>
       <DragAndDrop
         localizer={localizer}
+        view={view}
+        onView={setView}
+        date={date}
+        onNavigate={setDate}
         defaultDate={moment().toDate()}
-        defaultView="month"
+        defaultView="week"
         dayPropGetter={finaisSemana}
         messages={mensagem_traduzir}
         views={['month', 'week', 'day', 'agenda']}
