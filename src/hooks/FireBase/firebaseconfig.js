@@ -3,7 +3,6 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-
 const firebaseConfig = {
   apiKey: "",
   authDomain: "calendario-2cb0b.firebaseapp.com",
@@ -20,8 +19,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 export const db = getFirestore(app);
-export const auth = getAuth(app);
+//export const auth = getAuth(app);
 export const eventosRef = collection(db, "eventos");
-
 
 export default firebaseConfig;
