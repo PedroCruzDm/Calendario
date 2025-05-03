@@ -62,12 +62,28 @@
   gap: 20px; /* Adds equal spacing between items */
 }
 
-.Logo-etec{
-  width: 100%;
-  height: 100%;
+.Logo-etec {
+  max-width: 100%; /* Ensures the logo does not exceed the container width */
+  height: auto; /* Maintains aspect ratio */
   margin-left: 5%;
-  width: 300px;
-  height: 100px;
+  width: 200px; /* Reduced size */
+  height: 80px; /* Reduced size */
+}
+
+@media (max-width: 768px) {
+  .Logo-div {
+    justify-content: center; /* Centers the logo on smaller screens */
+    padding: 10px;
+    flex-direction: column; /* Makes the logos stack in a column */
+    align-items: center; /* Centers the logos in the column */
+    gap: 10px; /* Adjusts spacing between items in the column */
+  }
+
+  .Logo-etec {
+    width: 90%; /* Further adjusts size for smaller screens */
+    height: auto; /* Maintains aspect ratio */
+    margin-left: 0; /* Removes unnecessary margin */
+  }
 }
 
 @media (max-width: 768px) {
