@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import Calendario from './components/Calendario/calendario.jsx';
 import { ano, cursos, cod_inst, unidade, cidade } from './hooks/Etec/Info.js';
+// Removed unused import for images
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
             </p>
           </div>
           <div className='Logo-div'>
-            logos
+            <img src={process.env.PUBLIC_URL + '/images/etec_zona_leste_logo.png'} alt="Logo" className='Logo-etec' />
+            <img src={process.env.PUBLIC_URL + '/images/gov-sp-vertical.png'} alt="Logo" className='Logo-etec' />
           </div>
         </div>
         

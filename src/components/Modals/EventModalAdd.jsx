@@ -16,19 +16,20 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
         if (title.trim() === "") {
             alert("O título do evento não pode estar vazio.");
             return;
-        }
-        else if (start >= end) {
+        } else if (start >= end) {
             alert("A data de início deve ser anterior à data de término.");
             return;
         }
         
-        else{
-            const newEvent = {
+        const localStart = new Date(new Date(start).getTime() - new Date().getTimezoneOffset() * 60000);
+        const localEnd = new Date(new Date(end).getTime() - new Date().getTimezoneOffset() * 60000);
+
+        const newEvent = {
             title,
             type,
             desc,
-            start,
-            end,
+            start: localStart,
+            end: localEnd,
             important,
             color,
             id: Date.now(),
@@ -47,7 +48,6 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
             console.error("Erro ao adicionar evento:", error);
         }
     };
-}
 
     return (
         <div className="modal_event" onClick={(e) => e.stopPropagation()}>
@@ -59,7 +59,7 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
 
                 <div className="modal_event_body">
                     <p>Nome do Evento:</p>
-                    <input type="text" value={title} onChange={e => setTitle(e.target.value)} required/>
+                    <input type="text" value={title} onChange={e => setTitle(e.target.value)} required />
 
                     <p>Tipo de Evento:</p>
                     <select value={type} onChange={e => setType(e.target.value)} required>
@@ -68,23 +68,27 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                         <option value="Evento">Evento</option>
                         <option value="Sabado Letivo">Sábado Letivo</option>
                         <option value="nao_letivo">Não Letivo</option>
-
                         <option value="Outro">Outro</option>
                     </select>
 
                     <p>Descrição do Evento:</p>
-                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px',}} required></textarea>
+                    <textarea 
+                        value={desc} 
+                        onChange={e => setDesc(e.target.value)} 
+                        style={{resize: 'vertical', height: '20px', maxHeight: '100px'}} 
+                        required 
+                    ></textarea>
 
-                    <p>Data de Inícial do evento:</p>
-                    <input type="datetime-local" value={start} onChange={e => setStart(e.target.value)} required/>
+                    <p>Data de Início do evento:</p>
+                    <input type="datetime-local" value={start} onChange={e => setStart(e.target.value)} required />
 
                     <p>Data de Final do evento:</p>
-                    <input type="datetime-local" value={end} onChange={e => setEnd(e.target.value)} required/>
+                    <input type="datetime-local" value={end} onChange={e => setEnd(e.target.value)} required />
 
                     <p>Escolha a cor do evento:</p>
-                    <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
                         <div className="div_grupo_cor">
-                            <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
+                            <input type="color" value={color} onChange={e => setColor(e.target.value)} required />
                         </div>
                     </div>
 
