@@ -16,3 +16,55 @@
   height: '100%';
   height: '100vh';
 }
+
+.divisoria_2{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.div-cursos-titulo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 99%;
+  border: black solid 4px;
+  background-color: #afafaf;
+}
+
+.div-cursos-tabela {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 5%;
+}
+
+.div-cursos-tabela table {
+  width: 100%;
+  height: 100%;
+  border: solid 4px black;
+}
+
+.div-cursos-tabela table tr {
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .div-cursos-tabela {
+    margin-bottom: 10%;
+  }
+
+  .div-cursos-tabela table {
+    font-size: 0.9rem;
+  }
+
+  .div-cursos-tabela table tr {
+    font-weight: normal;
+  }
+}

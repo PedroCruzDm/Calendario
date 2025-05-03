@@ -122,8 +122,7 @@ const EventModal = ({ event, onClose, onDeleteEvento, onUpdateEvento }) => {
                   minute: "2-digit",
                   timeZone: "America/Sao_Paulo",
                 })}</p>
-
-              <p>Nível de importância: {event.important}</p>
+              <br></br>
             </>
           )}
         </div>

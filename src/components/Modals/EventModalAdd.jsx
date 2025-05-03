@@ -67,6 +67,8 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                         <option value="Tarefa">Tarefa</option>
                         <option value="Evento">Evento</option>
                         <option value="Sabado Letivo">Sábado Letivo</option>
+                        <option value="nao_letivo">Não Letivo</option>
+
                         <option value="Outro">Outro</option>
                     </select>
 
@@ -78,15 +80,6 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
 
                     <p>Data de Final do evento:</p>
                     <input type="datetime-local" value={end} onChange={e => setEnd(e.target.value)} required/>
-
-                    <p>Importância do evento:</p>
-                    <select value={important} onChange={e => setImportant(e.target.value)} required>
-                        <option value="n/a">N/A</option>
-                        <option value="Leve">Leve</option>
-                        <option value="Moderado">Moderado</option>
-                        <option value="Importante">Importante</option>
-                        <option value="Urgente">Urgente</option>
-                    </select>
 
                     <p>Escolha a cor do evento:</p>
                     <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column' }}>

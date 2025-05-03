@@ -5,7 +5,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth
 
 
 const firebaseConfig = {
-  apiKey: "",
+  apiKey: "AIzaSyDaO2ENxmhrr1UamtoZgI3ujePMSaLT1qo",
   authDomain: "calendario-2cb0b.firebaseapp.com",
   databaseURL: "https://calendario-2cb0b-default-rtdb.firebaseio.com",
   projectId: "calendario-2cb0b",

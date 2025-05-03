@@ -18,6 +18,10 @@ const localizer = momentLocalizer(moment);
 function Calendario() {
   const [events, setEvents] = useState(eventos); //Iniciando com os eventos
   const [eventsSelected, setEventsSelected] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [view, setView] = useState('month');
+  const onNavigate = useCallback((newDate) => setDate(newDate), [setDate])
+  const onView = useCallback((newView) => setView(newView), [setView])
 
   React.useEffect(() => {
     const carregarEventos = async () => {
@@ -140,15 +144,20 @@ function Calendario() {
   }, []);
 
   return (
-    <div>
+    <div style={{ width: '100%', marginBottom: 20 }}>
       <DragAndDrop
         localizer={localizer}
         defaultDate={moment().toDate()}
         defaultView="month"
         dayPropGetter={finaisSemana}
         messages={mensagem_traduzir}
+        date={date}
+        onNavigate={onNavigate}
+        onView={onView}
+        view={view}
+        formats={FormatoAgenda.formats}
         views={['month', 'week', 'day', 'agenda']}
-        style={{ height: 900, fontWeight: 'bold', fontSize: 20 }}
+        style={{ height: '80vh', fontWeight: 'bold', fontSize: '1rem' }}
         events={events}
         resizable
         onEventDrop={onEventDrop}
