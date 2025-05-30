@@ -1,0 +1,63 @@
+import { useState } from "react";
+import "./Styles/style.css";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { db } from '../../hooks/FireBase/firebaseconfig.js';
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+const LoginCheck = () => {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
+
+  const auth = getAuth();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      // Buscar documento do usuário pelo email na coleção 'usuarios'
+      const usuariosRef = collection(db, "usuarios");
+      const q = query(usuariosRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+
+        // Autenticar no Firebase Auth
+        const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+        const user = userCredential.user;
+
+        alert(`Usuário logado:\nNome: ${userData.nome}\nImagem URL: ${userData.foto}\nEmail: ${user.email}\nTipo: ${userData.tipoConta}`);
+      } else {
+        alert("Usuário não encontrado na coleção 'usuarios'.");
+      }
+    } catch (err) {
+      setError("Erro ao tentar logar: " + err.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleLogin}>
+      <input
+        type="email"
+        placeholder="E-mail"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        value={senha}
+        onChange={e => setSenha(e.target.value)}
+        required
+      />
+      <button type="submit">Entrar</button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </form>
+  );
+};
+
+export default LoginCheck;

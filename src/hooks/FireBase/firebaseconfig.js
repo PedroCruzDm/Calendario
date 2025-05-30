@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, collection } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "",
+  apiKey: "AIzaSyDaO2ENxmhrr1UamtoZgI3ujePMSaLT1qo",
   authDomain: "calendario-2cb0b.firebaseapp.com",
   databaseURL: "https://calendario-2cb0b-default-rtdb.firebaseio.com",
   projectId: "calendario-2cb0b",
@@ -19,7 +19,10 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 export const db = getFirestore(app);
-//export const auth = getAuth(app);
+export const auth = getAuth(app);
+
 export const eventosRef = collection(db, "eventos");
+export const usuariosRef = (uid) => collection(db, "usuarios", uid, "eventos");
+console.log("Referência de eventos:", eventosRef);
 
 export default firebaseConfig;

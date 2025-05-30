@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import style from "./Styles/style.css";
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { db } from '../../hooks/FireBase/firebaseconfig.js';
-import { toast } from "react-toastify";
 
 const EventModalAdd = ({ event, onClose, onAddEvento }) => {
     const [title, setTitle] = useState(event.title);
@@ -12,19 +10,20 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
     const [start, setStart] = useState(event.start.toISOString().slice(0, 16));
     const [end, setEnd] = useState(event.end.toISOString().slice(0, 16));
     const [important, setImportant] = useState(event.important);
-    const [color, setColor] = useState('#00aaff');
+    const [color, setColor] = useState('#00aaff'); // Cor padrão inicial
 
     const handleSave = async () => {
         if (title.trim() === "") {
             alert("O título do evento não pode estar vazio.");
             return;
         }
-        if (start >= end) {
+        else if (start >= end) {
             alert("A data de início deve ser anterior à data de término.");
             return;
         }
-
-        const newEvent = {
+        
+        else{
+            const newEvent = {
             title,
             type,
             desc,
@@ -34,39 +33,21 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
             color,
             id: Date.now(),
         };
-
+        
         try {
-            const auth = getAuth();
-            const user = auth.currentUser;
-
-            let docRef;
-
-            if (user && user.uid) {
-
-                // Usuário logado? (sim) = salva na subcoleção do usuário
-                const userEventsCollection = collection(db, "usuarios", user.uid, "eventos");
-                docRef = await addDoc(userEventsCollection, newEvent);
-                newEvent.id = docRef.id;
-            } else {
-                // Usuário logado? (não) = salva na coleção global
-                const globalEventsCollection = collection(db, "eventos");
-                docRef = await addDoc(globalEventsCollection, newEvent);
-                newEvent.id = docRef.id;
-            }
-
+            const docRef = await addDoc(collection(db, "eventos"), newEvent);
+            newEvent.id = docRef.id; // substitui o id local pelo id do Firestore
+            
             if (onAddEvento) {
                 onAddEvento(newEvent);
             }
 
-            toast.success("Evento adicionado com sucesso!");
             onClose();
-
         } catch (error) {
             console.error("Erro ao adicionar evento:", error);
-            console.warn("Erro ao salvar o evento. Verifique suas permissões.");
-            toast.error("Erro ao salvar o evento. Verifique suas permissões.");
         }
     };
+}
 
     return (
         <div className="modal_event" onClick={(e) => e.stopPropagation()}>
@@ -90,12 +71,12 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Descrição do Evento:</p>
-                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px'}} required></textarea>
+                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px',}} required></textarea>
 
-                    <p>Data de Início do evento:</p>
+                    <p>Data de Inícial do evento:</p>
                     <input type="datetime-local" value={start} onChange={e => setStart(e.target.value)} required/>
 
-                    <p>Data de Término do evento:</p>
+                    <p>Data de Final do evento:</p>
                     <input type="datetime-local" value={end} onChange={e => setEnd(e.target.value)} required/>
 
                     <p>Importância do evento:</p>
@@ -108,7 +89,7 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Escolha a cor do evento:</p>
-                    <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
                         <div className="div_grupo_cor">
                             <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
                         </div>

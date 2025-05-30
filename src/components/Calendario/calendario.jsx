@@ -10,7 +10,7 @@ import EventModalAdd from '../Modals/EventModalAdd.jsx';
 import { eventos, fetchEventos } from './../../hooks/Calendario/Eventos.js';
 import { collection, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"; // <- agora está correto
 import { db } from '../../hooks/FireBase/firebaseconfig.js';
-import './Style/calendario.css';
+import './css/calendario.css';
 
 const DragAndDrop = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
@@ -18,8 +18,10 @@ const localizer = momentLocalizer(moment);
 function Calendario() {
   const [events, setEvents] = useState(eventos); //Iniciando com os eventos
   const [eventsSelected, setEventsSelected] = useState(null);
-  const [view, setView] = useState('week');
+  const [view, setView] = useState('month');
   const [date, setDate] = useState(moment().toDate());
+  const onNavigate = useCallback((newDate) => setDate(newDate), [setDate])
+  const onView = useCallback((newView) => setView(newView), [setView])
 
   React.useEffect(() => {
     const carregarEventos = async () => {
@@ -146,14 +148,13 @@ function Calendario() {
       <DragAndDrop
         localizer={localizer}
         view={view}
-        onView={setView}
+        onView={onView}
         date={date}
-        onNavigate={setDate}
+        onNavigate={onNavigate}
         defaultDate={moment().toDate()}
         defaultView="week"
         dayPropGetter={finaisSemana}
         messages={mensagem_traduzir}
-        views={['month', 'week', 'day', 'agenda']}
         style={{ height: 900, fontWeight: 'bold', fontSize: 20 }}
         events={events}
         resizable

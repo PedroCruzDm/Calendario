@@ -1,0 +1,158 @@
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, getUsuariosRef, db } from '../../hooks/FireBase/firebaseconfig';
+
+const CadastroModal = ({ isOpen, onClose }) => {
+    const [form, setForm] = useState({
+        nome: '',
+        foto: '',
+        email: '',
+        tipoConta: '',
+        senha: '',
+        confirmarSenha: '',
+    });
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const usuariosRef = getUsuariosRef();
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        if (form.senha !== form.confirmarSenha) {
+            setError('As senhas não coincidem.');
+            return;
+        }
+        setLoading(true);
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.senha);
+            const user = userCredential.user;
+
+            await updateProfile(user, {
+                displayName: form.nome,
+                photoURL: form.foto,
+            });
+
+            console.log('Criando documento no Firestore...');
+            await setDoc(doc(usuariosRef, user.uid), {
+                nome: form.nome,
+                foto: form.foto,
+                email: form.email,
+                tipoConta: form.tipoConta,
+                uid: user.uid,
+            });
+            console.log('Documento criado com sucesso!');
+
+            onClose();
+        } catch (err) {
+            setError(err.message);
+        }
+        setLoading(false);
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div style={styles.overlay}>
+            <div style={styles.modal}>
+                <h2>Cadastro de Usuário</h2>
+                <form onSubmit={handleSubmit} style={styles.form}>
+                    <input
+                        type="text"
+                        name="nome"
+                        placeholder="Nome"
+                        value={form.nome}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                    <input
+                        type="text"
+                        name="foto"
+                        placeholder="URL da Foto de Perfil"
+                        value={form.foto}
+                        onChange={handleChange}
+                        style={styles.input}
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                    <select
+                        name="tipoConta"
+                        value={form.tipoConta}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    >
+                        <option value="">Tipo de Conta</option>
+                        <option value="usuario">Usuário</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                    <input
+                        type="password"
+                        name="senha"
+                        placeholder="Senha"
+                        value={form.senha}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                    <input
+                        type="password"
+                        name="confirmarSenha"
+                        placeholder="Confirmar Senha"
+                        value={form.confirmarSenha}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                    {error && <div style={styles.error}>{error}</div>}
+                    <button type="submit" disabled={loading} style={styles.button}>
+                        {loading ? 'Cadastrando...' : 'Cadastrar'}
+                    </button>
+                    <button type="button" onClick={onClose} style={styles.closeButton}>
+                        Fechar
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+const styles = {
+    overlay: {
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 1000,
+    },
+    modal: {
+        background: '#fff', padding: 24, borderRadius: 8, minWidth: 320, boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+    },
+    form: {
+        display: 'flex', flexDirection: 'column', gap: 12,
+    },
+    input: {
+        padding: 8, borderRadius: 4, border: '1px solid #ccc',
+    },
+    button: {
+        padding: 10, borderRadius: 4, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer',
+    },
+    closeButton: {
+        padding: 8, borderRadius: 4, border: 'none', background: '#ccc', color: '#333', cursor: 'pointer', marginTop: 8,
+    },
+    error: {
+        color: 'red', fontSize: 14,
+    },
+};
+
+export default CadastroModal;

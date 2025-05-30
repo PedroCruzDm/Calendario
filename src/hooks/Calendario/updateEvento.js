@@ -1,38 +1,30 @@
-  const handleUpdate = async () => {
-    try {
-      const updatedEvent = {
-        ...event,
-        title,
-        type,
-        desc,
-        start, // já está como string no formato ISO
-        end,
-        important,
-        color,
-      };
+import { doc, updateDoc } from "firebase/firestore";
+import { db, usuariosRef, eventosRef } from "../FireBase/firebaseconfig";
+import useAuth from "../useAuth";
 
-      const docRef = doc(db, "eventos", event.id);
-      await updateDoc(docRef, updatedEvent);
+export const updateEvento = async (evento) => {
+  const { usuarioLogado: user } = useAuth();
 
-      const snapshot = await getDocs(collection(db, "eventos"));
-      const updatedEvents = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-        };
-      });
+  if (!evento.id) throw new Error("Evento sem ID");
 
-      console.log("Eventos atualizados:", updatedEvents);
+  let docRef;
 
-      if (onUpdateEvento) {
-        onUpdateEvento(updatedEvent);
-      }
+  if (user && user.uid) {
+    // Usuário logado: usa subcoleção do usuário
+    docRef = doc(db, usuariosRef, user.uid, "eventos", evento.id);
+    console.swan("Atualizando evento na subcoleção do usuário:", docRef.path);
+  } else {
+    // Caso não esteja logado: evento global
+    docRef = doc(db, eventosRef, evento.id);
+  }
 
-      onClose();
-    } catch (error) {
-      console.error("Erro ao atualizar evento:", error);
-    }
-  };
-
-export default updateEvento;
+  await updateDoc(docRef, {
+    title: evento.title,
+    type: evento.type,
+    desc: evento.desc,
+    start: new Date(evento.start),
+    end: new Date(evento.end),
+    important: evento.important,
+    color: evento.color,
+  });
+};

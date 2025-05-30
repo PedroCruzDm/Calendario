@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { db } from './../../hooks/FireBase/firebaseconfig.js';
-import { doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { db, eventosRef, usuariosRef } from './../../hooks/FireBase/firebaseconfig.js';
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { toast } from "react-toastify";
 import './Styles/style.css';
 
-// Função segura para converter qualquer tipo de data
 const toISOStringSafe = (date) => {
-  if (date?.toDate) return date.toDate().toISOString().slice(0, 16); // Firebase Timestamp
-  if (typeof date === 'string') return new Date(date).toISOString().slice(0, 16); // String
-  if (date instanceof Date) return date.toISOString().slice(0, 16); // Date
+  if (date?.toDate) return date.toDate().toISOString().slice(0, 16);
+  if (typeof date === 'string') return new Date(date).toISOString().slice(0, 16); 
+  if (date instanceof Date) return date.toISOString().slice(0, 16);
   return "";
 };
 
@@ -23,13 +24,25 @@ const EventModal = ({ event, onClose, onDeleteEvento, onUpdateEvento }) => {
 
   const handleDelete = async () => {
     try {
-      const docRef = doc(db, "eventos", event.id);
-      await deleteDoc(docRef);
-
-      if (onDeleteEvento) onDeleteEvento(event.id);
-      onClose();
+      const auth = getAuth();
+      // Espera autenticação para garantir usuário atualizado
+      onAuthStateChanged(auth, async (user) => {
+        let docRef;
+        if (user && user.uid) {
+          docRef = doc(db, usuariosRef, user.uid, "eventos", event.id);
+        } else {
+          docRef = doc(db, eventosRef, event.id);
+        }
+        await deleteDoc(docRef);
+        if (onDeleteEvento) {
+          onDeleteEvento(event.id);
+        }
+        toast.success("Evento excluído com sucesso!");
+        onClose();
+      });
     } catch (error) {
       console.error("Erro ao excluir evento:", error);
+      toast.error("Erro ao excluir o evento. Verifique suas permissões.");
     }
   };
 
@@ -44,11 +57,9 @@ const EventModal = ({ event, onClose, onDeleteEvento, onUpdateEvento }) => {
       important,
       color,
     };
-
     try {
       const docRef = doc(db, "eventos", event.id);
       await updateDoc(docRef, updatedEvent);
-
       if (onUpdateEvento) {
         onUpdateEvento({
           ...updatedEvent,
@@ -56,7 +67,6 @@ const EventModal = ({ event, onClose, onDeleteEvento, onUpdateEvento }) => {
           end: new Date(end),
         });
       }
-
       onClose();
     } catch (error) {
       console.error("Erro ao atualizar evento:", error);
