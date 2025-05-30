@@ -23,9 +23,12 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
             alert("A data de início deve ser anterior à data de término.");
             return;
         }
+        
+        
+        else{
 
-        const newEvent = {
-            title,
+            const newEvent = {
+                title,
             type,
             desc,
             start,
@@ -90,7 +93,8 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Descrição do Evento:</p>
-                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px'}} required></textarea>
+                    <textarea value={desc} onChange={e => setDesc(e.target.value)} style={{resize: 'vertical', height: '20px', maxHeight: '100px',}} required>    
+                    </textarea>
 
                     <p>Data de Início do evento:</p>
                     <input type="datetime-local" value={start} onChange={e => setStart(e.target.value)} required/>
@@ -108,11 +112,7 @@ const EventModalAdd = ({ event, onClose, onAddEvento }) => {
                     </select>
 
                     <p>Escolha a cor do evento:</p>
-                    <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
-                        <div className="div_grupo_cor">
-                            <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
-                        </div>
-                    </div>
+                    <input type="color" value={color} onChange={e => setColor(e.target.value)} required/>
 
                     <div className="modal_event_buttons">
                         <button className="modal_event_save" onClick={handleSave}>Salvar</button>

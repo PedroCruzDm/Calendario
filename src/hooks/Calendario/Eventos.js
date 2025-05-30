@@ -3,15 +3,6 @@ import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/
 import { db } from "../FireBase/firebaseconfig.js";
 import { toast } from "react-toastify";
 
-const formatDate = (d) => {
-  if (!d) return "";
-  if (typeof d === "object" && typeof d.toDate === "function") {
-    return d.toDate().toISOString().slice(0, 16);
-  }
-  const date = new Date(d);
-  return isNaN(date) ? "" : date.toISOString().slice(0, 16);
-};
-
 export const fetchEventos = async () => {
   const auth = getAuth();
   return new Promise((resolve) => {

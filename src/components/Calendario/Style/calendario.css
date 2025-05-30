@@ -1,0 +1,22 @@
+:root {
+    --txt-primary-color: rgb(0, 110, 255);
+}
+
+.rbc-date-cell {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.rbc-toolbar-label{
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--txt-primary-color)
+}
+.rbc-btn-group button{
+    font-weight: bold;
+    color: var(--txt-primary-color)
+}
+.rbc-header{
+    font-weight: bold;
+    color: var(--txt-primary-color)
+}

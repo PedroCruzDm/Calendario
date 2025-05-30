@@ -8,9 +8,7 @@ import 'moment/locale/pt-br';
 import EventModal from '../Modals/EventModal.jsx';
 import EventModalAdd from '../Modals/EventModalAdd.jsx';
 import { eventos, fetchEventos } from './../../hooks/Calendario/Eventos.js';
-import { collection, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"; // <- agora está correto
-import { db } from '../../hooks/FireBase/firebaseconfig.js';
-import './css/calendario.css';
+import './Style/calendario.css';
 
 const DragAndDrop = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
@@ -117,32 +115,6 @@ function Calendario() {
     
   };
 
-  const mensagem_traduzir = useMemo(() => ({
-    allDay: 'Dia inteiro',
-    previous: 'Anterior',
-    next: 'Proximo',
-    today: 'Hoje',
-    month: 'Mês',
-    week: 'Semana',
-    day: 'Dia',
-    agenda: 'Agenda',
-    date: 'Data',
-    time: 'Horário',
-    event: 'Evento',
-    noEventsInRange: 'Nenhum evento encontrado ',
-  }), []);
-
-  const finaisSemana = useCallback((date) => {
-    const cor_fim_de_semana = 'rgba(236, 17, 17, 0.09)';
-    if (moment(date).day() === 0) {
-      return { className: 'sunday', style: { backgroundColor: cor_fim_de_semana, color: 'red' } };
-    }
-    if (moment(date).day() === 6) {
-      return { className: 'saturday', style: { backgroundColor: cor_fim_de_semana, color: 'black' } };
-    }
-    return {};
-  }, []);
-
   return (
     <div>
       <DragAndDrop
@@ -152,9 +124,8 @@ function Calendario() {
         date={date}
         onNavigate={onNavigate}
         defaultDate={moment().toDate()}
-        defaultView="week"
-        dayPropGetter={finaisSemana}
-        messages={mensagem_traduzir}
+        defaultView="month"
+        views={['month', 'week', 'day', 'agenda']}
         style={{ height: 900, fontWeight: 'bold', fontSize: 20 }}
         events={events}
         resizable

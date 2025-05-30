@@ -11,12 +11,12 @@ function App() {
 
   return (
     <div className='App Calendario'>
-      <div className='App-header'>
-        <ToastContainer />
-        <Header onAbrirModalCadastro={() => setModalAberto(true)} />
-        <CadastroModal isOpen={modalAberto} onClose={() => setModalAberto(false)} />
-      </div>      
+      <div className='divisoria'>
         <Calendario />
+
+        <div className='ferramentas'></div>
+        
+      </div>
     </div>
   );
 }
